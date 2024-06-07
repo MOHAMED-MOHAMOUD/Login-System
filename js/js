@@ -1,0 +1,56 @@
+let users = [];
+function showSignup() {
+    document.getElementById('signup-container').classList.remove('hidden');
+    document.getElementById('login-container').classList.add('hidden');
+    clearErrorMessages();
+}
+function showLogin() {
+    document.getElementById('signup-container').classList.add('hidden');
+    document.getElementById('login-container').classList.remove('hidden');
+    clearErrorMessages();
+}
+function signup() {
+    var name = document.getElementById('signup-name').value;
+    var email = document.getElementById('signup-email').value;
+    var password = document.getElementById('signup-password').value;
+    var errorSpan = document.getElementById('signup-error');
+    if (!name || !email || !password) {
+        errorSpan.textContent = 'All inputs are required';
+        return;
+    }
+    var userExists = users.some(user => user.email === email);
+    if (userExists) {
+        errorSpan.textContent = 'Email already exists. Please use a different email.';
+        return;
+    }
+    users.push({ name, email, password });
+    errorSpan.textContent = '';
+    alert('Registration successful. Please log in.');
+    showLogin();
+}
+function login() {
+    var email = document.getElementById('login-email').value;
+    var password = document.getElementById('login-password').value;
+    var errorSpan = document.getElementById('login-error');
+    if (!email || !password) {
+        errorSpan.textContent = 'All inputs are required';
+        return;
+    }
+    var user = users.find(user => user.email === email && user.password === password);
+    if (!user) {
+        errorSpan.textContent = 'Invalid email or password';
+        return;
+    }
+    document.getElementById('user-name').textContent = user.name;
+    document.getElementById('login-container').classList.add('hidden');
+    document.getElementById('home-container').classList.remove('hidden');
+    errorSpan.textContent = '';
+}
+function logout() {
+    document.getElementById('home-container').classList.add('hidden');
+    showLogin();
+}
+function clearErrorMessages() {
+    document.getElementById('signup-error').textContent = '';
+    document.getElementById('login-error').textContent = '';
+}
